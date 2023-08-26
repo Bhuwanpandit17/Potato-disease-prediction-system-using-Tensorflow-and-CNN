@@ -1,0 +1,111 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/cblogo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+k rel="manifest" href="%PUBLIC_URL%/manifest.json" /> Notice the use of %PUBLIC_URL% in the tags above. It will be replaced with the URL of the `public` folder during the build. Only files inside the `public` folder can be referenced from the HTML. Unlike
+"/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will work correctly both with client-side routing and a non-root public URL. Learn how to configure a non-root public URL by running `npm run build`. --> le>codebasics
+</title>
+head>
+
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+  -->
+
+</body>
+
+</html> --> DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Classification Demo</title>
+    <m eta charset="utf-8">
+        <m eta name="viewport" content="width=device-width, initial-scale=1">
+            <sty le>
+                /* Style for the image upload button */ .upload-btn-wrapper { position: relative; overflow: hidden; display: inline-block; } .btn { border: 2px solid gray; color: gray; background-color: white; padding: 8px 20px; border-radius: 8px; font-size: 16px; font-weight:
+                bold; } .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; } /* Style for the classification results */ .result { font-size: 18px; font-weight: bold; margin-top: 20px; }
+                </ style>
+</head>
+
+<body>
+    <h1>Image Classification Demo</h1>
+    <p>Select an image to classify:</p>
+    <d iv class="upload-btn-wrapper">
+        <button class="btn">Upload a file</button>
+        <input type="file" onchange="loadImage(event)">
+        </di v>
+        <div class="
+r               esult" id="res
+           ult"></div>
+        <!-- Load TensorFlow.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
+        <script>
+            // Load the pre-trained model and classes
+            async f
+            unction
+            loadMod
+            el() {
+                const model = await tf.loadLayersModel('model.5');
+                const classes = ['class1', 'class2', 'class3', 'class4', 'class5']; // Manual class input
+                return {
+                    model,
+                    classes
+                };
+            }
+            let modelPromise = loadModel();
+            // Classify an image
+            async function classifyImage(image) {
+                const {
+                    model,
+                    classes
+                } = await modelPromise;
+                // Preprocess the image
+                const tensor = tf.browser.fromPixels(image).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
+                // Predict the class probabilities
+                const prediction = model.predict(tensor);
+                // Get the index of the predicted class
+                const predictedClass = prediction.argMax(1).dataSync()[0];
+                // Get the label for the predicted class
+                const label = classes[predictedClass];
+                return label;
+            }
+            // Load the selected image and classify it
+            f
+            unction loadImage(event) {
+                const reader = new FileReader();
+                reader.onload = async function() {
+                    const image = new Image();
+                    image.onload = async function() {
+                        const label = await classifyImage(image);
+                        document.getElementById('result').textContent = `The image is classified as ${label}.`;
+                    };
+                    image.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        </script>
+</body>
+
+</html>
